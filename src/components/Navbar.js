@@ -8,6 +8,7 @@ import "./Navbar.css"
 function Navbar() {
   const [toggleMenu, setToggleMenu] = React.useState(false);
   const [isLoading, setIsLoading]  = React.useState(false);
+  
   const signOut = (e)=>{
     setIsLoading(true);
     data.signOut(data.auth).then(() => {
@@ -29,7 +30,7 @@ function Navbar() {
     <div>  <nav className="app__navbar">
     <div className="app__navbar-logo">
       <img src={data.logo} alt="app__logo" /> 
-    </div> <div className='p__opensans'><h1>Grammer analytics </h1></div>
+    </div> <div className='p__opensans'><h1>Resume Builder Admin Dashboard </h1></div>
     <div>
       <ul className='app__navbar-links'> 
   

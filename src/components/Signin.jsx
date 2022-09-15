@@ -54,7 +54,7 @@ const Signin = () => {
   }
 
   return(
-    <span>{!token?<div className="main__container">  <h2>Please login to see Grammer insights</h2>
+    <span>{!token?<div className="main__container">  <h2>Please login to create resume template</h2>
     
       <div className="imgcontainer">
         <img src={data.design} alt="Avatar" className="avatar" />

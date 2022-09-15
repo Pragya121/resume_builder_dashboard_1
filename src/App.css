@@ -53,7 +53,8 @@
 .app__links__tasks{
   list-style: none;
 }
-
+.a { color: #14270d; } /* CSS link color (red) */
+.a:hover { color: #74bd74; } /* CSS link hover (green) */
 .custom__button {
   background-color: var(--color-crimson);
     color: var(--color-black);
