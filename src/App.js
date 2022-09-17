@@ -33,7 +33,7 @@ function App() {
       ? JSON.parse(localStorage.getItem("token"))
       : null
   );
-  const [showDialog, setShowDialog] = React.useState(true);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   function loadFile(url, callback) {
@@ -315,78 +315,57 @@ function App() {
             isOpen={showDialog}
             onDismiss={close}
           >
-            <div >
-              
+            <div>
               <p className="headingsDialog">
                 {" "}
-               Click to add the headings to new order
+                Click to add the headings to new order
               </p>
-              {sectionNamesf.map((item, index) => {
-                let i = 0;
-
+              {sectionNamesf.map((sect, index) => {
                 return (
-                  <div>
-                    <table>
-                      <tbody >
-                        <tr
-                          className="clickable-text "
-                          sx={{ cursor: "pointer" }}
-                          onClick={(e) => {
-                            const n = sectionNamesf.indexOf(item);
-                            // newOrderedSections[index] = item;
-                            let arr = [...newOrderedSections];
-                            arr.push(item);
-                            setnewOrderedSections(arr);
-                            if (n > -1) {
-                              // only splice array when item is found
-                              sectionNamesf.splice(n, 1); // 2nd parameter means remove one item only
-                            }
-                            i = i + 1;
-                          }}
-                        >
-                          {" "}
-                          <a
-                          
-                            
-                          >
-                            {item}
-                          </a>{" "}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  <>
+                    <li>
+                      {sect}{" "}
+                      <input id={sect} type="number" defaultValue={index + 1} />
+                    </li>
+                  </>
                 );
               })}
-              <div >
-                <p className="headingsDialog ">
-                  The new order of sections is
-                </p>{newOrderedSections.length?<div> <li className="dialog-text">##added sections will be shown here##</li></div>:
-                newOrderedSections.map((item, index) => {
-                  let i = 0;
-                  return <li className="dialog-text">{item}</li>;
-                })
-                }
-                {/* {newOrderedSections.map((item, index) => {
-                  let i = 0;
-                  return <li className="dialog-text">{item}</li>;
-                })} */}
-              </div>
             </div>
             <button
-              hidden={newOrderedSections.length > 0}
               onClick={(e) => {
-                let arr = [...sectionNamesf];
+                let arr = [];
+                debugger;
+                let allindexes = Array.from(Array(sectionNamesf.length).keys());
+                console.log(allindexes);
+                for (let sections of sectionNamesf) {
+                  let i = Number(document.getElementById(sections).value);
+                  i = --i;
+                  if (allindexes.includes(i)) {
+                    const n = allindexes.indexOf(i);
 
-                setnewOrderedSections(arr);
+                    allindexes.splice(n, 1);
+                    arr[i] = sections;
+                  } else {
+                    swal({
+                      icon: "error",
+                      text: "Please use correct indexing.",
+                    });
+                    return;
+                  }
+                  setnewOrderedSections(arr);
+                }
+                console.log("new indexes are", arr);
               }}
             >
               {" "}
-              Don't change order
+              Change order
             </button>
 
             <div className="app__links__tasks ">
-              <p className="headingsDialog">Please select the fields to have add more button</p>
-              {fields.map((listItem, i) => {
+              <p className="headingsDialog">
+                Please select the fields to have add more button
+              </p>
+              {sectionNamesf.map((listItem, i) => {
                 return (
                   <li key={i} className="highlighted-text">
                     <input type="checkbox" value={listItem} />
@@ -422,10 +401,10 @@ function App() {
             >
               Okay, all done
             </button>
+            {/* </div> */}
           </Dialog>
 
           <Footer />
-                                                                                                                                                                                                                                   
         </div>
       );
     } else {
