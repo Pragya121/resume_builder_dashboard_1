@@ -111,7 +111,10 @@ function App() {
       function (error, content) {
         if (error) {
           setIsLoading(false);
-          alert("There is some error in document.");
+         swal({
+          text:"There is some error in document.",
+          icon:"error"
+         });
           throw error;
         }
         var zip = new PizZip(content);
@@ -126,6 +129,8 @@ function App() {
         console.log(tags);
         text = { ...tags };
         console.log(text);
+
+        
         let sectionNames = Object.keys(text);
         let obj = { Basic_Details: [] };
         for (let key of sectionNames) {
@@ -139,12 +144,7 @@ function App() {
         setsectionNamesf(Object.keys(obj));
         console.log(sectionNamesf);
         console.log(obj);
-        let arr = [];
-        let temp = Object.values(obj);
-        temp.map((val) => {
-          arr.push(...val);
-        });
-        setFields(arr);
+
         //uploading prteview an doc one by one
         try {
           const storage = getStorage();
