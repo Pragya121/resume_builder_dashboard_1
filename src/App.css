@@ -53,8 +53,7 @@
 .app__links__tasks{
   list-style: none;
 }
-.a { color: #14270d; } /* CSS link color (red) */
-.a:hover { color: #74bd74; } /* CSS link hover (green) */
+
 .custom__button {
   background-color: var(--color-crimson);
     color: var(--color-black);
@@ -104,4 +103,46 @@
   width: 45px;
 }
 
+.clickable-text{
+  font-family: var(--font-alt);
+  color: var(--color-white);
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+  line-height: 29.9px;
+  font-size: 23px;
 
+}
+.headingsDialog{
+  font-family: var(--font-base);
+  color:#1B5E20;
+  font-weight: 800;
+  font-size: 28px;
+  /* line-height: 83.2px; */
+  letter-spacing: 0.04em;
+  /* text-transform: capitalize; */
+}
+.dialog-text{
+  font-family: var(--font-alt);
+  color: #388E3C;
+  font-size: 18px;
+  /* line-height: 50px; */
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+.highlighted-text{
+  font-family: var(--font-alt);
+  color:#4CAF50;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+
+  /* line-height: 28px; */
+  font-size: 20px;
+  list-style-position: outside;
+  list-style: none;
+}
+
+a { color: #14270d; } /* CSS link color (red) */
+a:hover { color: #74bd74; } /* CSS link hover (green) */

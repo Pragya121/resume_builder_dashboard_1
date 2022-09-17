@@ -33,7 +33,7 @@ function App() {
       ? JSON.parse(localStorage.getItem("token"))
       : null
   );
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showDialog, setShowDialog] = React.useState(true);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   function loadFile(url, callback) {
@@ -146,76 +146,75 @@ function App() {
         });
         setFields(arr);
         //uploading prteview an doc one by one
-        try{
-          
-        const storage = getStorage();
-        let fileNameParts;
-        let strName = "";
+        try {
+          const storage = getStorage();
+          let fileNameParts;
+          let strName = "";
 
-        fileNameParts = previewFile.name.split(".");
+          fileNameParts = previewFile.name.split(".");
 
-        var metadata = {
-          contentType: previewFile.type,
-        };
+          var metadata = {
+            contentType: previewFile.type,
+          };
 
-        strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-preview.${
-          fileNameParts[fileNameParts.length - 1]
-        }`;
+          strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-preview.${
+            fileNameParts[fileNameParts.length - 1]
+          }`;
 
-        const storageRef = ref(storage, strName);
-        const uploadTask = uploadBytes(storageRef, previewFile, metadata);
-        uploadTask.then((result) => {
-          console.log("after upload Task ", result);
-          getDownloadURL(ref(storage, strName)).then((url) => {
-            console.log("Preview Url", url);
-            previewUrl = url;
-            fileNameParts = docFile.name.split(".");
+          const storageRef = ref(storage, strName);
+          const uploadTask = uploadBytes(storageRef, previewFile, metadata);
+          uploadTask.then((result) => {
+            console.log("after upload Task ", result);
+            getDownloadURL(ref(storage, strName)).then((url) => {
+              console.log("Preview Url", url);
+              previewUrl = url;
+              fileNameParts = docFile.name.split(".");
 
-            var metadata = {
-              contentType: docFile.type,
-            };
+              var metadata = {
+                contentType: docFile.type,
+              };
 
-            strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-doc.${
-              fileNameParts[fileNameParts.length - 1]
-            }`;
+              strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-doc.${
+                fileNameParts[fileNameParts.length - 1]
+              }`;
 
-            const storageRef = ref(storage, strName);
-            const uploadTask = uploadBytes(storageRef, docFile, metadata);
-            uploadTask.then((result) => {
-              console.log("after upload Task ", result);
-              getDownloadURL(ref(storage, strName)).then((durl) => {
-                console.log("Doc Url", durl);
-                docUrl = durl;
-                let finalData = {
-                  name: templateName,
-                  tags: category,
-                  previewImageLink: previewUrl,
-                  templateFileLink: docUrl,
-                  sections: Object.keys(obj),
-                  fields: obj,
-                };
-                setfinalObj1(finalData);
-                setIsLoading(false);
-                swal({
-                  title: "Are you sure to proceed?",
-                  text: "Please check the order of sections and change it if required and add fields with add more button",
+              const storageRef = ref(storage, strName);
+              const uploadTask = uploadBytes(storageRef, docFile, metadata);
+              uploadTask.then((result) => {
+                console.log("after upload Task ", result);
+                getDownloadURL(ref(storage, strName)).then((durl) => {
+                  console.log("Doc Url", durl);
+                  docUrl = durl;
+                  let finalData = {
+                    name: templateName,
+                    tags: category,
+                    previewImageLink: previewUrl,
+                    templateFileLink: docUrl,
+                    sections: Object.keys(obj),
+                    fields: obj,
+                  };
+                  setfinalObj1(finalData);
+                  setIsLoading(false);
+                  swal({
+                    title: "Are you sure to proceed?",
+                    text: "Please check the order of sections and change it if required and add fields with add more button",
 
-                  icon: "warning",
-                  buttons: true,
-                  dangerMode: true,
-                }).then((willProceed) => {
-                  if (willProceed) {
-                    setShowDialog(true);
-                  } else {
-                    swal("Please re-upload the files and click proceed");
-                    return;
-                  }
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                  }).then((willProceed) => {
+                    if (willProceed) {
+                      setShowDialog(true);
+                    } else {
+                      swal("Please re-upload the files and click proceed");
+                      return;
+                    }
+                  });
                 });
               });
             });
           });
-        });
-        }catch(e){
+        } catch (e) {
           console.log(e);
           swal({
             text: "Error encountered, please retry",
@@ -311,18 +310,16 @@ function App() {
               </button>
             </div>
           </div>
-
-          <Footer />
           <Dialog
             style={{ color: "green", fontFamily: "Verdana" }}
             isOpen={showDialog}
             onDismiss={close}
           >
-            <div>
-              <p>
+            <div >
+              
+              <p className="headingsDialog">
                 {" "}
-                Please check the order of sections, you can re order it if
-                necessary.
+               Click to add the headings to new order
               </p>
               {sectionNamesf.map((item, index) => {
                 let i = 0;
@@ -330,8 +327,9 @@ function App() {
                 return (
                   <div>
                     <table>
-                      <tbody>
+                      <tbody >
                         <tr
+                          className="clickable-text "
                           sx={{ cursor: "pointer" }}
                           onClick={(e) => {
                             const n = sectionNamesf.indexOf(item);
@@ -348,9 +346,8 @@ function App() {
                         >
                           {" "}
                           <a
-                            style={{ cursor: "pointer" }}
-                            onmouseover="this.style.color='orange';"
-                            onmouseout="this.style.color="
+                          
+                            
                           >
                             {item}
                           </a>{" "}
@@ -360,12 +357,19 @@ function App() {
                   </div>
                 );
               })}
-              <div>
-                <p>The new order of sections is</p>
-                {newOrderedSections.map((item, index) => {
+              <div >
+                <p className="headingsDialog ">
+                  The new order of sections is
+                </p>{newOrderedSections.length?<div> <li className="dialog-text">##added sections will be shown here##</li></div>:
+                newOrderedSections.map((item, index) => {
                   let i = 0;
-                  return <li>{item}</li>;
-                })}
+                  return <li className="dialog-text">{item}</li>;
+                })
+                }
+                {/* {newOrderedSections.map((item, index) => {
+                  let i = 0;
+                  return <li className="dialog-text">{item}</li>;
+                })} */}
               </div>
             </div>
             <button
@@ -380,11 +384,11 @@ function App() {
               Don't change order
             </button>
 
-            <div>
-              <p>Please select the fields to have add more button</p>
+            <div className="app__links__tasks ">
+              <p className="headingsDialog">Please select the fields to have add more button</p>
               {fields.map((listItem, i) => {
                 return (
-                  <li key={i}>
+                  <li key={i} className="highlighted-text">
                     <input type="checkbox" value={listItem} />
                     {listItem}
                   </li>
@@ -419,6 +423,9 @@ function App() {
               Okay, all done
             </button>
           </Dialog>
+
+          <Footer />
+                                                                                                                                                                                                                                   
         </div>
       );
     } else {
