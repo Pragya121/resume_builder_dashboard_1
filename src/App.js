@@ -25,7 +25,10 @@ function App() {
   const [isSignedout, setIsSignedout] = React.useState(false);
 
   const [finalObj1, setfinalObj1] = React.useState({});
-  const [sectionNamesf, setsectionNamesf] = React.useState([]);
+  const [sectionNamesf, setsectionNamesf] = React.useState([ "qeqwe",
+  "jjshh",
+  "piaif",
+  "asjdhgj"]);
   const [newOrderedSections, setnewOrderedSections] = React.useState([]);
   const [fields, setFields] = React.useState([]);
   const [token, setToken] = React.useState(
@@ -33,12 +36,32 @@ function App() {
       ? JSON.parse(localStorage.getItem("token"))
       : null
   );
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showDialog, setShowDialog] = React.useState(true);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   function loadFile(url, callback) {
     PizZipUtils.getBinaryContent(url, callback);
   }
+  const signOut = (e) => {
+    setIsLoading(true);
+    setIsSignedout(true);
+    data
+      .signOut(data.auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("Signed out");
+        localStorage.removeItem("token");
+        localStorage.removeItem("loginData");
+        setIsLoading(false);
+        window.location.reload();
+      })
+      .catch((error) => {
+        // An error happened.
+        alert("error in signing out!");
+        setIsLoading(false);
+        console.log(error);
+      });
+  };
 
   const postDoc = async (finalData) => {
     setIsLoading(true);
@@ -67,7 +90,10 @@ function App() {
       return resp;
     } catch (errors) {
       console.error(errors);
-      alert(errors.response.data);
+      alert("Adding template failed, please try again");
+      signOut()
+      localStorage.removeItem("token");
+      localStorage.removeItem("loginData");
       setIsLoading(false);
     }
   };
@@ -144,6 +170,7 @@ function App() {
         setsectionNamesf(Object.keys(obj));
         console.log(sectionNamesf);
         console.log(obj);
+        let tempuuid = uuidv4();
 
         //uploading prteview an doc one by one
         try {
@@ -157,7 +184,7 @@ function App() {
             contentType: previewFile.type,
           };
 
-          strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-preview.${
+          strName = `resumeBuilder/${tempuuid}/preview.${
             fileNameParts[fileNameParts.length - 1]
           }`;
 
@@ -174,7 +201,7 @@ function App() {
                 contentType: docFile.type,
               };
 
-              strName = `resumeBuilder/${templateName}/${uuidv4()}/${templateName}-doc.${
+              strName = `resumeBuilder/${tempuuid}/template.${
                 fileNameParts[fileNameParts.length - 1]
               }`;
 
@@ -191,6 +218,7 @@ function App() {
                     previewImageLink: previewUrl,
                     templateFileLink: docUrl,
                     sections: Object.keys(obj),
+                    templatePath:tempuuid,
                     fields: obj,
                   };
                   setfinalObj1(finalData);
@@ -224,26 +252,7 @@ function App() {
       }
     );
   };
-  const signOut = (e) => {
-    setIsLoading(true);
-    setIsSignedout(true);
-    data
-      .signOut(data.auth)
-      .then(() => {
-        // Sign-out successful.
-        console.log("Signed out");
-        localStorage.removeItem("token");
-        localStorage.removeItem("loginData");
-        setIsLoading(false);
-        window.location.reload();
-      })
-      .catch((error) => {
-        // An error happened.
-        alert("error in signing out!");
-        setIsLoading(false);
-        console.log(error);
-      });
-  };
+  
 
   useEffect(() => {
     //statements
@@ -387,7 +396,8 @@ function App() {
                   tags: finalObj1.tags,
                   previewImageLink: finalObj1.previewImageLink,
                   templateFileLink: finalObj1.templateFileLink,
-                  sections: finalObj1.sections,
+                  templatePath:finalObj1.templatePath,
+                  sections: newOrderedSections,
                   fields: finalObj1.fields,
                   addmore: values,
                 };
